@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auto Era", "Auto Era.csproj", "{54D05531-0CC5-0664-F02A-4C8029183223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auto Era.Editor", "Auto Era.Editor.csproj", "{31EDA85A-7C6B-D8C1-17DB-6EF2747E0455}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54D05531-0CC5-0664-F02A-4C8029183223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54D05531-0CC5-0664-F02A-4C8029183223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54D05531-0CC5-0664-F02A-4C8029183223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54D05531-0CC5-0664-F02A-4C8029183223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31EDA85A-7C6B-D8C1-17DB-6EF2747E0455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31EDA85A-7C6B-D8C1-17DB-6EF2747E0455}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31EDA85A-7C6B-D8C1-17DB-6EF2747E0455}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31EDA85A-7C6B-D8C1-17DB-6EF2747E0455}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
