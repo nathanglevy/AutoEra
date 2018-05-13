@@ -12,8 +12,9 @@ namespace UnityEditor
 		private const float k_PerlinOffset = 100000f;
 		public GameObject[] m_Prefabs;
 		public float m_PerlinScale = 0.5f;
-	    public int m_amount = 50;
-		public int m_Z;
+	    public int m_Amount = 50;
+	    public ItemType m_ItemType = ItemType.Wood;
+		public int m_Z = -3;
 
 		public override void Paint(GridLayout grid, GameObject brushTarget, Vector3Int position)
 		{
@@ -26,8 +27,11 @@ namespace UnityEditor
             int index = Mathf.Clamp(Mathf.FloorToInt(GetPerlinValue(position, m_PerlinScale, k_PerlinOffset)*m_Prefabs.Length), 0, m_Prefabs.Length - 1);
 			GameObject prefab = m_Prefabs[index];
 			GameObject instance = (GameObject) PrefabUtility.InstantiatePrefab(prefab);
-            TextMesh textMesh = instance.GetComponentInChildren<TextMesh>();
-		    textMesh.text = m_amount.ToString();
+            ItemObject itemObject = instance.GetComponentInChildren<ItemObject>();
+		    itemObject.ItemType = m_ItemType;
+            itemObject.AddAmount(m_Amount);
+//            TextMesh textMesh = instance.GetComponentInChildren<TextMesh>();
+//		    textMesh.text = m_amount.ToString();
 			Undo.RegisterCreatedObjectUndo((Object)instance, "Paint Prefabs");
 			if (instance != null)
 			{
@@ -86,11 +90,12 @@ namespace UnityEditor
 		public override void OnPaintInspectorGUI()
 		{
 			m_SerializedObject.UpdateIfRequiredOrScript();
-			prefabBrush.m_PerlinScale = EditorGUILayout.Slider("Perlin Scale", prefabBrush.m_PerlinScale, 0.001f, 0.999f);
+//			prefabBrush.m_PerlinScale = EditorGUILayout.Slider("Perlin Scale", prefabBrush.m_PerlinScale, 0.001f, 0.999f);
 			prefabBrush.m_Z = EditorGUILayout.IntField("Position Z", prefabBrush.m_Z);
-			prefabBrush.m_amount = (EditorGUILayout.IntSlider("Amount", prefabBrush.m_amount, 5,500)/5)*5;
-				
-			EditorGUILayout.PropertyField(m_Prefabs, true);
+			prefabBrush.m_Amount = (EditorGUILayout.IntSlider("Amount", prefabBrush.m_Amount, 5,500)/5)*5;
+		    prefabBrush.m_ItemType = (ItemType)EditorGUILayout.EnumPopup("ItemType", prefabBrush.m_ItemType);
+
+            EditorGUILayout.PropertyField(m_Prefabs, true);
 			m_SerializedObject.ApplyModifiedPropertiesWithoutUndo();
 		}
 	}

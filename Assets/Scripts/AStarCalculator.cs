@@ -37,7 +37,7 @@ public class AStarCalculator
             {
                 if (visited.Contains(neighbour) || toVisitList.ContainsValue(neighbour))
                     continue;
-                if (!Tilemapper.isGridPassableAtCoordinate(_gameWorld,neighbour))
+                if (!Tilemapper.IsGridPassableAtCoordinate(_gameWorld,neighbour))
                     continue;
                 originPosition.Add(neighbour,currentPosition);
                 double newCost = currentCost + CalculateCost(currentPosition, neighbour, 1f);
@@ -57,6 +57,8 @@ public class AStarCalculator
                 currentPosition = originPosition[currentPosition];
                 timeout++;
             }
+            listOfCoords.Insert(0, currentPosition);
+
             if (timeout >= 5000)
                 throw new TimeoutException("Finding source of path timed out -- unexpected!");
             return new MovementPath(listOfCoords);

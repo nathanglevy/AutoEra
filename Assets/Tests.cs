@@ -151,7 +151,7 @@ public class Tests : MonoBehaviour
         for (var x = currentBounds.xMin-1; x < currentBounds.xMax+1; x++)
         {
             for (var y = currentBounds.yMin-1; y < currentBounds.yMax+1; y++) {
-                if (!Tilemapper.isGridPassableAtCoordinate(gameWorldGrid, new Vector2Int(x, y)))
+                if (!Tilemapper.IsGridPassableAtCoordinate(gameWorldGrid, new Vector2Int(x, y)))
                 {
                    
                     tileMap.SetTile(new Vector3Int(x, y, 0), blockTile);
@@ -175,7 +175,7 @@ public class Tests : MonoBehaviour
                 textMesh.text = x + "," + y;
                 Font textMeshFont = textMesh.font;
                 textMesh.characterSize = 0.5f;
-                textGameObject.AddComponent<MeshRenderer>();
+//                textGameObject.AddComponent<MeshRenderer>();
                 textGameObject.transform.SetPositionAndRotation(local, Quaternion.identity);
             }
         }
