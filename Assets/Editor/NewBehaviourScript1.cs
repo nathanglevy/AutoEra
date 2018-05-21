@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.Scripts.SerializableGame;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEditor;
