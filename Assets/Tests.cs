@@ -30,10 +30,11 @@ public class Tests : MonoBehaviour
         SetNewMovementPath(character);
 
 //	    gameWorld.AddNewCharacterToLocation(new Vector3Int(-5, 0, 0));
-	    gameWorld.AddNewCharacterToLocation(new Vector3Int(-5, -2, 0));
+	    Character character2 = gameWorld.AddNewCharacterToLocation(new Vector3Int(-5, -2, 0));
 	    var item = gameWorld.GetItemAtLocation(new Vector3Int(-2, -1, 0));
         item.AssignAmount(160);
         item.RemoveAssignedAmount(160);
+        
 	    //	    allTiles = Resources.LoadAll<Tile>("Tilemaps/Tiles/");
 	    //        foreach (Tile tile in allTiles)
 	    //        {

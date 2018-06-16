@@ -62,6 +62,7 @@ namespace Assets.Scripts.GameWorld
             }
             else
             {
+                //TODO -- add an assertion that there really is JUST ONE.
                 return itemList[0];
             }
         }
@@ -100,6 +101,8 @@ namespace Assets.Scripts.GameWorld
         public ItemObject AddNewItemToLocation(Vector3Int location, ItemType itemType, int amount)
         {
             ItemObject itemAtCurrentLocation = GetItemAtLocation(location);
+            //TODO -- if from same time -- add to it
+            //TODO if not from same type -- throw exception
             if (itemAtCurrentLocation != null)
                 return itemAtCurrentLocation;
 

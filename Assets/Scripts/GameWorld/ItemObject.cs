@@ -11,7 +11,7 @@ namespace Assets.Scripts.GameWorld
         private int amountOfItemAssigned;
         [SerializeField]
         private ItemType itemType;
-
+        //TODO -- add amountIncomming + interface function
 
         public ItemType ItemType
         {
@@ -31,12 +31,16 @@ namespace Assets.Scripts.GameWorld
         }
         public void AddAmount(int amount)
         {
+            //TODO -- change to exception or add message
             Assert.IsTrue(amount >= 0);
             amountOfItem += amount;
             UpdateDisplay();
         }
         public void AssignAmount(int amount)
         {
+            //TODO -- impletement a 'commitment' system where a character has commitments on incomming/outgoing
+            //        this will effect the inventory total
+            //TODO -- change to exception or add message
             Assert.IsTrue(AmountOfItemUnAssigned >= amount);
             amountOfItemAssigned += amount;
         }

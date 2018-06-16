@@ -60,8 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\2D Customizable Character - Male\Scripts\CharacterSetup.cs" />
-    <Compile Include="Assets\Character.cs" />
+    <Compile Include="Assets\Scripts\GameWorld\Character.cs" />
     <Compile Include="Assets\Scripts\GameWorld\GameWorld.cs" />
+    <Compile Include="Assets\Scripts\GameWorld\Inventory.cs" />
     <Compile Include="Assets\Scripts\GameWorld\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Movement\AStarCalculator.cs" />
     <Compile Include="Assets\Scripts\Movement\MovementPath.cs" />
