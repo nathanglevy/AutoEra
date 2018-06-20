@@ -16,6 +16,12 @@ namespace Assets.Scripts.Movement
             _gameWorld = gameWorld;
         }
 
+        public MovementPath FindShortestPath(Vector3Int source, List<Vector3Int> validDestinations,
+            PathOptions pathOptions)
+        {
+            return FindShortestPath(source.ToVec2(), validDestinations.Select(it => it.ToVec2()).ToList(), pathOptions);
+        }
+
         public MovementPath FindShortestPath(Vector2Int source, List<Vector2Int> validDestinations, PathOptions pathOptions)
         {
             SortedList<double, Vector2Int> toVisitList = new SortedList<double, Vector2Int>(new DuplicateKeyComparer<double>());
@@ -30,7 +36,7 @@ namespace Assets.Scripts.Movement
                 var currentPosition = toVisitList.Values[0];
                 var currentCost = toVisitList.Keys[0];
                 toVisitList.RemoveAt(0);
-                Debug.Log("visiting " + currentPosition);
+//                Debug.Log("visiting " + currentPosition);
 
                 if (visited.Contains(currentPosition))
                     continue;
@@ -64,12 +70,12 @@ namespace Assets.Scripts.Movement
 
                 if (timeout >= 5000)
                     throw new TimeoutException("Finding source of path timed out -- unexpected!");
-                return new MovementPath(listOfCoords);
+                return new MovementPath(listOfCoords.Select(it => it.ToVec3()).ToList());
             }
             return null;
         }
 
-        public double CalculateCost(Vector2Int source, Vector2Int target, double baseCost)
+        private double CalculateCost(Vector2Int source, Vector2Int target, double baseCost)
         {
             var diff = source - target;
             //TODO: we can easily optimize this to be a mapping of positions as below ==> numbers!!!

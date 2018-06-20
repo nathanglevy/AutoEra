@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoEra", "MyScriptAssembly.csproj", "{68D6F968-BD4C-1620-FAA9-B5D396D22FD0}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoEra", "Assembly-CSharp.csproj", "{FDAE6576-15C8-2C1C-ED50-7916175589BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoEra", "TestAssembly.csproj", "{4442DA8E-8FF4-58F2-7EBD-095CB3659583}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoEra", "Assembly-CSharp-Editor.csproj", "{BC18F6DD-D742-7ACC-71A7-8ABB1BD422C7}"
 EndProject
@@ -11,10 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68D6F968-BD4C-1620-FAA9-B5D396D22FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68D6F968-BD4C-1620-FAA9-B5D396D22FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68D6F968-BD4C-1620-FAA9-B5D396D22FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68D6F968-BD4C-1620-FAA9-B5D396D22FD0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FDAE6576-15C8-2C1C-ED50-7916175589BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FDAE6576-15C8-2C1C-ED50-7916175589BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDAE6576-15C8-2C1C-ED50-7916175589BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDAE6576-15C8-2C1C-ED50-7916175589BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4442DA8E-8FF4-58F2-7EBD-095CB3659583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4442DA8E-8FF4-58F2-7EBD-095CB3659583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4442DA8E-8FF4-58F2-7EBD-095CB3659583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4442DA8E-8FF4-58F2-7EBD-095CB3659583}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC18F6DD-D742-7ACC-71A7-8ABB1BD422C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC18F6DD-D742-7ACC-71A7-8ABB1BD422C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC18F6DD-D742-7ACC-71A7-8ABB1BD422C7}.Release|Any CPU.ActiveCfg = Release|Any CPU

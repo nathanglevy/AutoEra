@@ -14,8 +14,8 @@ public class MyWindow : EditorWindow
     string saveRoot;
 
     bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
+//    bool myBool = true;
+//    float myFloat = 1.23f;
     private static Object source;
 
     //    private Object source;
@@ -105,7 +105,7 @@ public class MyWindow : EditorWindow
 
     void loadGameWorld(string pathToLoadFrom, GameObject gameWorldGrid)
     {
-        Dictionary<string, Tilemap> tileMaps = new Dictionary<string, Tilemap>();
+//        Dictionary<string, Tilemap> tileMaps = new Dictionary<string, Tilemap>();
         var loadedJson = File.ReadAllText(pathToLoadFrom);
         var gameWorld = JsonConvert.DeserializeObject<GameMap>(loadedJson);
         convertGameMapToTileMaps(gameWorld.tileLayerDictionary);
@@ -122,7 +122,7 @@ public class MyWindow : EditorWindow
             var newGameObject = new GameObject(layerName+"_new");
             var tileMap = newGameObject.AddComponent<Tilemap>();
             
-            var tilemapRenderer = newGameObject.AddComponent<TilemapRenderer>();
+            newGameObject.AddComponent<TilemapRenderer>();
             var parent = source as GameObject;
             if (parent != null)
                 newGameObject.transform.SetParent(parent.transform);

@@ -18,6 +18,19 @@ namespace Assets.Scripts.GameWorld
         public Inventory Inventory = new Inventory();
         //TODO -- Inventory system
 
+        public bool IsACurrentPathInTransit()
+        {
+            return (currentPath != null || pendingPath != null);
+        }
+
+        public MovementPath GetCurrentMovementPath()
+        {
+            if (currentPath != null)
+                return currentPath.movementPathSource;
+            else
+                return pendingPath;
+        }
+
         public void SetPosition(Vector3Int position)
         {
             transform.position = GetWorldLocation(position);
@@ -58,7 +71,7 @@ namespace Assets.Scripts.GameWorld
                 bool isNotDone = currentPath.Enumerator.MoveNext();
                 if (isNotDone)
                 {
-                    Vector3Int sourceCell = currentPath.Enumerator.Current.ToVec3();
+                    Vector3Int sourceCell = currentPath.Enumerator.Current;
                     StartWalking(sourceCell - targetCell);
                     timeStarted = Time.time;
                     targetCell = sourceCell;
@@ -83,7 +96,7 @@ namespace Assets.Scripts.GameWorld
                     return;
                 }
                 Vector3 newVector3 = Vector3.Lerp(GetWorldLocation(currentCell), GetWorldLocation(targetCell), fraction);
-                Debug.Log("Current Pos:" + newVector3);
+//                Debug.Log("Current Pos:" + newVector3);
                 transform.position = newVector3;
             }
         }

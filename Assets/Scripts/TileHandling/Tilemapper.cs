@@ -19,7 +19,7 @@ namespace Assets.Scripts.TileHandling
                 BlockingTile convertedTile = tile as BlockingTile;
             
                 if ((convertedTile != null) && (convertedTile.isImpassible)) {
-                    Debug.Log("Tile is impassible: " + convertedTile.isImpassible);
+//                    Debug.Log("Tile is impassible: " + convertedTile.isImpassible);
                     return false;
                 } else {
                     foundPassible = true;
@@ -50,6 +50,8 @@ namespace Assets.Scripts.TileHandling
                     : currentBounds.yMin;
             }
 
+            currentBounds.zMin = 0;
+            currentBounds.zMax = 1;
             return currentBounds;
         }
     }

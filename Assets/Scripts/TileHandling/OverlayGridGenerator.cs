@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Movement;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -12,9 +13,15 @@ namespace Assets.Scripts.TileHandling
             return Resources.Load<Tile>("TileMaps/ArrowTiles/ArrowSpriteSheet_"+tileIndex);
         }
 
+        public static void ClearOverlay(Grid overlayGrid)
+        {
+            var renderer = overlayGrid.GetComponents<Tilemap>();
+            renderer.ToList().ForEach(ch => ch.ClearAllTiles());
+        }
+
         public static void GeneratePathGraphic(Grid overlayGrid, MovementPath movementPath)
         {
-            Tile[] arrowTile = Resources.LoadAll<Tile>("TileMaps/ArrowTiles/");
+//            Tile[] arrowTile = Resources.LoadAll<Tile>("TileMaps/ArrowTiles/");
             
             var tileMap = SetupTileMapObject(overlayGrid, "Arrow Overlay", 4);
 
@@ -32,7 +39,7 @@ namespace Assets.Scripts.TileHandling
             {
                 Debug.Log(pathEnumerator.Current);
                 var currentCell = pathEnumerator.Current;
-                var diff = currentCell - previousCell;
+                var diff = currentCell.ToVec2() - previousCell.ToVec2();
                 Debug.Log(diff);
                 var arrowIndex = arrowMap[diff]*4;
                 //var arrowTileSelected = arrowTile[arrowIndex];

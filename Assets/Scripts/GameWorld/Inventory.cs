@@ -3,26 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting.Messaging;
+using Newtonsoft.Json.Bson;
 
 namespace Assets.Scripts.GameWorld
 {
-    public class Inventory
+    public class Inventory : IInventory
     {
-        internal Dictionary<ItemType, int> _currentAmount = new Dictionary<ItemType, int>();
-        internal List<Commitment> _outgoingAmount = new List<Commitment>();
-        internal List<Commitment> _incomingAmount = new List<Commitment>();
-        private int _maxSize = 1000;
-        private int _maxTypeCount = 5;
+        private Dictionary<ItemType, int> _currentAmount = new Dictionary<ItemType, int>();
+        private List<Commitment> OutgoingCommitments = new List<Commitment>();
+        private List<Commitment> IncomingCommitments = new List<Commitment>();
+//        private int _maxSize = 1000;
+//        private int _maxTypeCount = 5;
 
         //TODO -- enforce a MAX amount to place in inventory, currently is not blocked
         //
+//        public List<Commitment> GetOutGoingCommitList()
+//        {
+//            return OutgoingCommitments;
+//        }
+//
+//        public List<Commitment> GetIncomingCommitList()
+//        {
+//            return IncomingCommitments;
+//        }
+
+        public void AddCommitment(Commitment commitmentToAdd)
+        {
+            if (commitmentToAdd.committer == this && !OutgoingCommitments.Contains(commitmentToAdd))
+                OutgoingCommitments.Add(commitmentToAdd);
+            if (commitmentToAdd.committedTo == this && !IncomingCommitments.Contains(commitmentToAdd))
+                IncomingCommitments.Add(commitmentToAdd);
+        }
+
+        public void RemoveCommitment(Commitment commitmentToRemove)
+        {
+            if (commitmentToRemove.committer == this && OutgoingCommitments.Contains(commitmentToRemove))
+                OutgoingCommitments.Remove(commitmentToRemove);
+            if (commitmentToRemove.committedTo == this && IncomingCommitments.Contains(commitmentToRemove))
+                IncomingCommitments.Remove(commitmentToRemove);
+        }
+
+        public void RemoveCommitments(List<Commitment> commitmentsToRemove)
+        {
+            commitmentsToRemove.ForEach(RemoveCommitment);
+        }
+
         public bool CanAcceptAmount(ItemType itemType, int amount)
         {
             //TODO -- enforce a MAX amount to place in inventory, currently is not blocked
             return true;
         }
 
-        public bool MoveItemFromThisInventoryTo(Inventory targetInventory, ItemType itemType, int amount)
+        public bool MoveItemFromThisInventoryTo(IInventory targetInventory, ItemType itemType, int amount)
         {
             Commitment mergedCommitement = Commitment.MergeCommitmentsOfThisType(itemType, this, targetInventory);
             if (mergedCommitement == null || mergedCommitement.amount < amount)
@@ -47,42 +79,42 @@ namespace Assets.Scripts.GameWorld
         {
             if (!_currentAmount.ContainsKey(itemType))
                 return 0;
-            List<Commitment> outGoingCommitsOfType = _outgoingAmount.Where(it => it.itemType == itemType).ToList();
+            List<Commitment> outGoingCommitsOfType = OutgoingCommitments.Where(it => it.itemType == itemType).ToList();
             int committedAmount = outGoingCommitsOfType.Sum(it => it.amount);
             return GetCurrentAmount(itemType) - committedAmount;
         }
 
         public List<Commitment> GetAllOutgoingCommits()
         {
-            return _outgoingAmount.ToList();
+            return OutgoingCommitments.ToList();
         }
 
-        public List<Commitment> GetCommitmentsToInventory(Inventory targetInventory)
+        public List<Commitment> GetCommitmentsToInventory(IInventory targetInventory)
         {
-            return _outgoingAmount.FindAll(comm => comm.committedTo == targetInventory);
+            return OutgoingCommitments.FindAll(comm => comm.committedTo == targetInventory);
         }
 
-        public List<Commitment> GetCommitmentsToInventory(Inventory targetInventory, ItemType itemType)
+        public List<Commitment> GetCommitmentsToInventory(IInventory targetInventory, ItemType itemType)
         {
-            return _outgoingAmount.FindAll(comm => comm.committedTo == targetInventory && comm.itemType == itemType);
+            return OutgoingCommitments.FindAll(comm => comm.committedTo == targetInventory && comm.itemType == itemType);
         }
 
         public List<Commitment> GetAllIncomingCommits()
         {
-            return _incomingAmount.ToList();
+            return IncomingCommitments.ToList();
         }
 
-        public List<Commitment> GetCommitmentsFromInventory(Inventory sourceInventory)
+        public List<Commitment> GetCommitmentsFromInventory(IInventory sourceInventory)
         {
-            return _incomingAmount.FindAll(comm => comm.committer == sourceInventory);
+            return IncomingCommitments.FindAll(comm => comm.committer == sourceInventory);
         }
 
-        public List<Commitment> GetCommitmentsFromInventory(Inventory sourceInventory, ItemType itemType)
+        public List<Commitment> GetCommitmentsFromInventory(IInventory sourceInventory, ItemType itemType)
         {
-            return _incomingAmount.FindAll(comm => comm.committer == sourceInventory && comm.itemType == itemType);
+            return IncomingCommitments.FindAll(comm => comm.committer == sourceInventory && comm.itemType == itemType);
         }
 
-        public Commitment CommitToAnInventory(Inventory targetInventory, ItemType itemType, int amount)
+        public Commitment CommitToAnInventory(IInventory targetInventory, ItemType itemType, int amount)
         {
             if (!_currentAmount.ContainsKey(itemType))
                 throw new CommitmentException("Cannot commit because inventory does not contain this type");
@@ -96,16 +128,52 @@ namespace Assets.Scripts.GameWorld
             var merged = Commitment.MergeCommitmentsOfThisType(itemType, this, targetInventory);
             return merged;
         }
+
+        public void AddToCurrentAmount(ItemType itemType, int amount)
+        {
+            if (!CanAcceptAmount(itemType, amount))
+                throw new InventoryException("Cannot add more of this item to inventory -- it is full");
+            _currentAmount[itemType] = GetCurrentAmount(itemType) + amount;
+        }
+
+        public void RemoveFromCurrentAmount(ItemType itemType, int amount)
+        {
+            if (GetCurrentUncommittedAmount(itemType) < amount)
+                throw new InventoryException("Cannot remove this amount -- not enough uncommitted");
+            _currentAmount[itemType] = GetCurrentAmount(itemType) - amount;
+        }
+    }
+
+    public interface IInventory
+    {
+//        List<Commitment> GetOutGoingCommitList();
+//        List<Commitment> GetIncomingCommitList();
+        void AddCommitment(Commitment commitmentToAdd);
+        void RemoveCommitment(Commitment commitmentToRemove);
+        void RemoveCommitments(List<Commitment> commitmentsToRemove);
+        bool CanAcceptAmount(ItemType itemType, int amount);
+        bool MoveItemFromThisInventoryTo(IInventory targetInventory, ItemType itemType, int amount);
+        int GetCurrentAmount(ItemType itemType);
+        int GetCurrentUncommittedAmount(ItemType itemType);
+        List<Commitment> GetAllOutgoingCommits();
+        List<Commitment> GetCommitmentsToInventory(IInventory targetInventory);
+        List<Commitment> GetCommitmentsToInventory(IInventory targetInventory, ItemType itemType);
+        List<Commitment> GetAllIncomingCommits();
+        List<Commitment> GetCommitmentsFromInventory(IInventory sourceInventory);
+        List<Commitment> GetCommitmentsFromInventory(IInventory sourceInventory, ItemType itemType);
+        Commitment CommitToAnInventory(IInventory targetInventory, ItemType itemType, int amount);
+        void AddToCurrentAmount(ItemType itemType,int amount);
+        void RemoveFromCurrentAmount(ItemType itemType, int amount);
     }
 
     public class Commitment
     {
         public readonly int amount;
         public readonly ItemType itemType;
-        public readonly Inventory committedTo;
-        public readonly Inventory committer;
+        public readonly IInventory committedTo;
+        public readonly IInventory committer;
 
-        public Commitment(int amount, ItemType itemType, Inventory committedTo, Inventory committer)
+        public Commitment(int amount, ItemType itemType, IInventory committedTo, IInventory committer)
         {
             this.amount = amount;
             this.itemType = itemType;
@@ -115,14 +183,14 @@ namespace Assets.Scripts.GameWorld
 
         public void CommitToComitterAndComitee()
         {
-            committer._outgoingAmount.Add(this);
-            committedTo._incomingAmount.Add(this);
+            committer.AddCommitment(this);
+            committedTo.AddCommitment(this);
         }
 
-        public static Commitment MergeCommitmentsOfThisType(ItemType itemType, Inventory committer,
-            Inventory committedTo)
+        public static Commitment MergeCommitmentsOfThisType(ItemType itemType, IInventory committer,
+            IInventory committedTo)
         {
-            List<Commitment> commitments = committer._outgoingAmount.FindAll(commitment =>
+            List<Commitment> commitments = committer.GetAllOutgoingCommits().FindAll(commitment =>
                 commitment.itemType == itemType &&
                 commitment.committer == committer &&
                 commitment.committedTo == committedTo);
@@ -132,8 +200,9 @@ namespace Assets.Scripts.GameWorld
             }
 
             var merged = new Commitment(commitments.Sum(a => a.amount), itemType, committedTo, committer);
-            committer._outgoingAmount.RemoveAll(commitments.Contains);
-            committedTo._incomingAmount.RemoveAll(commitments.Contains);
+
+            committer.RemoveCommitments(commitments);
+            committedTo.RemoveCommitments(commitments);
             merged.CommitToComitterAndComitee();
             return merged;
         }
@@ -151,10 +220,10 @@ namespace Assets.Scripts.GameWorld
                 throw new InventoryException("Cannot move more than there is in commitment!" +
                                              "Currently committing: " + amountToCommit + " but only committed to: " + amount);
             }
-            committer._outgoingAmount.Remove(this);
-            committedTo._incomingAmount.Remove(this);
-            committer._currentAmount[itemType] -= amountToCommit;
-            committedTo._currentAmount[itemType] += amountToCommit;
+            committer.RemoveCommitment(this);
+            committedTo.RemoveCommitment(this);
+            committer.RemoveFromCurrentAmount(itemType, amountToCommit);
+            committedTo.AddToCurrentAmount(itemType, amountToCommit);
             
             if (amountToCommit < amount)
             {

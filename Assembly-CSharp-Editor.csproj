@@ -63,15 +63,6 @@
     <Compile Include="Assets\Editor\ConvertTile.cs" />
     <Compile Include="Assets\Editor\customPreview.cs" />
     <Compile Include="Assets\Editor\NewBehaviourScript1.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\Coordinate Brush\Scripts\Editor\CoordinateBrush.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\GameObject Brush\Scripts\Editor\GameObjectBrush.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\Item Brush\Scripts\Editor\ItemBrush.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\Line Brush\Scripts\Editor\LineBrush.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\Prefab Brush\Scripts\Editor\PrefabBrush.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\Random Brush\Scripts\Editor\RandomBrush.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\Tint Brush Smooth\Scripts\Editor\TintBrushSmooth.cs" />
-    <Compile Include="Assets\Tilemap\Brushes\Tint Brush\Scripts\Editor\TintBrush.cs" />
-    <Compile Include="Assets\Tilemap\Tiles\Rule Tile\Scripts\Editor\RuleTileEditor.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>D:/Projects/AutoEra/AutoEra/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
@@ -371,6 +362,10 @@
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{FDAE6576-15C8-2C1C-ED50-7916175589BE}</Project>
       <Name>Assembly-CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="MyScriptAssembly.csproj">
+      <Project>{68D6F968-BD4C-1620-FAA9-B5D396D22FD0}</Project>
+      <Name>MyScriptAssembly</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

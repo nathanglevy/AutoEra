@@ -31,7 +31,7 @@ namespace UnityEditor
 			GameObject instance = (GameObject) PrefabUtility.InstantiatePrefab(prefab);
             ItemObject itemObject = instance.GetComponentInChildren<ItemObject>();
 		    itemObject.ItemType = m_ItemType;
-            itemObject.AddAmount(m_Amount);
+            itemObject.AddToCurrentAmount(m_ItemType,m_Amount);
 //            TextMesh textMesh = instance.GetComponentInChildren<TextMesh>();
 //		    textMesh.text = m_amount.ToString();
 			Undo.RegisterCreatedObjectUndo((Object)instance, "Paint Prefabs");

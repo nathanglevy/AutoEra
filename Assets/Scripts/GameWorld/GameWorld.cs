@@ -2,7 +2,6 @@
 using System.Linq;
 using Assets.Scripts.Movement;
 using Assets.Scripts.TileHandling;
-using Boo.Lang.Environments;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,7 +21,12 @@ namespace Assets.Scripts.GameWorld
         private GameObject itemPrefab;
         [SerializeField]
         private GameObject characterPrefab;
-        public AStarCalculator pathCalculator;
+        private AStarCalculator pathCalculator;
+
+        public AStarCalculator PathCalculator
+        {
+            get { return pathCalculator; }
+        }
 
         public void DisplayBlockedOverlay()
         {
@@ -39,9 +43,14 @@ namespace Assets.Scripts.GameWorld
             OverlayGridGenerator.GenerateGridCoordinateText(overlayGrid,gameWorldBaseGrid);
         }
 
+        public void ClearOverlay()
+        {
+            OverlayGridGenerator.ClearOverlay(overlayGrid);
+        }
+
         public List<ItemObject> GetAllItemsInBoundary(BoundsInt boundary)
         {
-            var allItems = new List<ItemObject>(itemGrid.GetComponentsInChildren<ItemObject>());
+            var allItems = new List<ItemObject>(itemGrid.transform.GetComponentsInChildren<ItemObject>());
             var allItemsInBoundary = allItems.Where(it => boundary.Contains(it.GetLocation()));
             return allItemsInBoundary.ToList();
         }
@@ -101,26 +110,29 @@ namespace Assets.Scripts.GameWorld
         public ItemObject AddNewItemToLocation(Vector3Int location, ItemType itemType, int amount)
         {
             ItemObject itemAtCurrentLocation = GetItemAtLocation(location);
-            //TODO -- if from same time -- add to it
-            //TODO if not from same type -- throw exception
             if (itemAtCurrentLocation != null)
+            {
+                //will throw exception if not of same type
+                itemAtCurrentLocation.AddToCurrentAmount(itemType,amount);
                 return itemAtCurrentLocation;
+            }
 
             GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(itemPrefab);
-//        TextMesh textMesh = instance.GetComponentInChildren<TextMesh>();
-//        textMesh.text = amount.ToString();
             var itemObject = instance.GetComponentInChildren<ItemObject>();
-            itemObject.AddAmount(amount);
+            itemObject.AddToCurrentAmount(itemType,amount);
             itemObject.ItemType = itemType;
             instance.transform.SetParent(itemGrid.transform);
             instance.transform.position = itemGrid.LocalToWorld(itemGrid.CellToLocalInterpolated(location + new Vector3(.5f, .5f, .5f)));
             return itemObject;
         }
 
+        void Awake()
+        {
+            pathCalculator = new AStarCalculator(gameWorldBaseGrid);
+        }
         // Use this for initialization
         void Start()
         {
-            pathCalculator = new AStarCalculator(gameWorldBaseGrid);
             DisplayCoordinates();
         }
 
@@ -148,5 +160,6 @@ namespace Assets.Scripts.GameWorld
         List<Character> GetCharactersAtBoundary(BoundsInt boundary);
         bool IsTilePassable(Vector2Int tileCoords);
         BoundsInt GetWorldBoundary();
+        void ClearOverlay();
     }
 }

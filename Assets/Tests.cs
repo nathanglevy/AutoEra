@@ -25,50 +25,66 @@ public class Tests : MonoBehaviour
 	    {
 	        Tilemap child = gameWorldGrid.transform.GetChild(i).GetComponent<Tilemap>();
             child.CompressBounds();
-	        Debug.Log(child.cellBounds);
+//	        Debug.Log(child.cellBounds);
 	    }
         SetNewMovementPath(character);
 
 //	    gameWorld.AddNewCharacterToLocation(new Vector3Int(-5, 0, 0));
 	    Character character2 = gameWorld.AddNewCharacterToLocation(new Vector3Int(-5, -2, 0));
 	    var item = gameWorld.GetItemAtLocation(new Vector3Int(-2, -1, 0));
-        item.AssignAmount(160);
-        item.RemoveAssignedAmount(160);
-        
-	    //	    allTiles = Resources.LoadAll<Tile>("Tilemaps/Tiles/");
-	    //        foreach (Tile tile in allTiles)
-	    //        {
-	    //            BlockingTile newTile = ScriptableObject.CreateInstance<BlockingTile>();
-	    //            newTile.sprite = tile.sprite;
-	    //            newTile.name = tile.name;
-	    //            
-	    //            AssetDatabase.CreateAsset(newTile, "Assets/Resources/Tilemaps/BlockableTiles/"+tile.name+".asset");
-	    //            Debug.Log(AssetDatabase.GetAssetPath(tile));
-	    //        }
+        item.AddToCurrentAmount(ItemType.Wood,161);
+        item.RemoveFromCurrentAmount(ItemType.Wood, 160);
+	    gameWorld.AddNewItemToLocation(new Vector3Int(-3, -3, 0), ItemType.Wood, 100);
+	    var itemsAtLocation = gameWorld.GetAllItemsInBoundary(gameWorld.GetWorldBoundary());
 
-	    // Print the path of the created asset
+        character.Inventory.AddToCurrentAmount(ItemType.Wood,100);
+	    Debug.Log(character.Inventory.GetCurrentAmount(ItemType.Wood));
+	    Debug.Log(character2.Inventory.GetCurrentAmount(ItemType.Wood));
+        character.Inventory.CommitToAnInventory(character2.Inventory, ItemType.Wood, 100);
+	    character.Inventory.MoveItemFromThisInventoryTo(character2.Inventory, ItemType.Wood, 25);
+        Debug.Log(character.Inventory.GetCurrentAmount(ItemType.Wood));
+        Debug.Log(character2.Inventory.GetCurrentAmount(ItemType.Wood));
+	    character.Inventory.MoveItemFromThisInventoryTo(character2.Inventory, ItemType.Wood, 25);
+	    character2.Inventory.CommitToAnInventory(character.Inventory, ItemType.Wood, 50);
+        Debug.Log(character.Inventory.GetCurrentAmount(ItemType.Wood));
+	    Debug.Log(character2.Inventory.GetCurrentAmount(ItemType.Wood));
+//	    character.Inventory.MoveItemFromThisInventoryTo(character2.Inventory, ItemType.Wood, 51);
 
-	    //print total amount of tiles which are blocked and which are not
-	    //	    for (var i = 0; i < gameWorldGrid.transform.childCount; i++) {
-	    //	        Tilemap child = gameWorldGrid.transform.GetChild(i).GetComponent<Tilemap>();
-	    //            child.CompressBounds();
-	    //	        TileBase[] tiles = child.GetTilesBlock(child.cellBounds);
-	    //            foreach (TileBase tile in tiles)
-	    //            {
-	    //                BlockingTile convertedTile = tile as BlockingTile;
-	    //                if (convertedTile != null)
-	    //                {
-	    //                    Debug.Log("Found a blocking tile");
-	    //                    Debug.Log("Tile is impassible: " + convertedTile.isImpassible);
-	    //                }
-	    //                else
-	    //                {
-	    //                    Debug.Log("Non blocking tile");
-	    //                }
-	    //            }
-	    //            
-	    //	    }
-	}
+
+        //	    allTiles = Resources.LoadAll<Tile>("Tilemaps/Tiles/");
+        //        foreach (Tile tile in allTiles)
+        //        {
+        //            BlockingTile newTile = ScriptableObject.CreateInstance<BlockingTile>();
+        //            newTile.sprite = tile.sprite;
+        //            newTile.name = tile.name;
+        //            
+        //            AssetDatabase.CreateAsset(newTile, "Assets/Resources/Tilemaps/BlockableTiles/"+tile.name+".asset");
+        //            Debug.Log(AssetDatabase.GetAssetPath(tile));
+        //        }
+
+        // Print the path of the created asset
+
+        //print total amount of tiles which are blocked and which are not
+        //	    for (var i = 0; i < gameWorldGrid.transform.childCount; i++) {
+        //	        Tilemap child = gameWorldGrid.transform.GetChild(i).GetComponent<Tilemap>();
+        //            child.CompressBounds();
+        //	        TileBase[] tiles = child.GetTilesBlock(child.cellBounds);
+        //            foreach (TileBase tile in tiles)
+        //            {
+        //                BlockingTile convertedTile = tile as BlockingTile;
+        //                if (convertedTile != null)
+        //                {
+        //                    Debug.Log("Found a blocking tile");
+        //                    Debug.Log("Tile is impassible: " + convertedTile.isImpassible);
+        //                }
+        //                else
+        //                {
+        //                    Debug.Log("Non blocking tile");
+        //                }
+        //            }
+        //            
+        //	    }
+    }
 
     // Update is called once per frame
     void Update () {
